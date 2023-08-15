@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "854674012014",
+    "project_id": "manajerpro",
+    "storage_bucket": "manajerpro.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:854674012014:android:4bb855286a9867a32eb37f",
+        "android_client_info": {
+          "package_name": "com.example.manajerpro"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "854674012014-5vt69hu0o1pu3t2fkt960k253ql6d0kj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAniQT9KuRn5QlSXXAA0RP5kMEn7bSASgU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "854674012014-5vt69hu0o1pu3t2fkt960k253ql6d0kj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
