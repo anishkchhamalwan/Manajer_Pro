@@ -15,7 +15,7 @@
     <string name="email">Email</string>
     <string name="sign_in_description_text">Enter Your Name </string>
 
-    <string name ="please_wait">Please Wait </string>
+    <string name="please_wait">Please Wait </string>
     <string name="please_click_back_again_to_exit">Please click back again to exit</string>
 
     <!--START-->
@@ -24,4 +24,13 @@
 
     <string name="nav_open">Open</string>
     <string name="nav_close">Close</string>
+
+    <string name="mobile">Mobile</string>
+    <string name="update">UPDATE</string>
+    <string name="my_profile_title">My Profile</string>
+
+    <string name="create_board_title">Create Board</string>
+    <string name="create">CREATE</string>
+    <string name="board_name">Board Name</string>
+
 </resources>

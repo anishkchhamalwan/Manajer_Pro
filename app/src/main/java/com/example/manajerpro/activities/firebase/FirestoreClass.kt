@@ -2,10 +2,14 @@ package com.example.manajerpro.activities.firebase
 
 import android.app.Activity
 import android.util.Log
+import android.widget.Toast
 import com.example.manajerpro.activities.MainActivity
+import com.example.manajerpro.activities.MyProfileActivity
 import com.example.manajerpro.activities.SignInActivity
 import com.example.manajerpro.activities.SignUpActivity
 import com.example.manajerpro.activities.models.User
+import com.example.manajerpro.activities.utils.Constants
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
 class FirestoreClass {
@@ -20,7 +24,26 @@ class FirestoreClass {
             }
 
     }
-    fun signInUser(activity: Activity){
+
+    fun updateUserProfileData(activity: MyProfileActivity,
+                              userHashMap:HashMap<String,Any>){
+        mFireStore.collection(Constants.USERS)
+            .document(getCurrentUserId())
+            .update(userHashMap)
+            .addOnSuccessListener{
+                Log.i(activity.javaClass.simpleName,"Profile Data Updated")
+                Toast.makeText(activity,"Profile Updated Successfully",Toast.LENGTH_LONG).show()
+                activity.profileUpdateSuccess()
+            }
+            .addOnFailureListener{
+                e->
+                activity.hideProgressDialog()
+                Log.e(activity.javaClass.simpleName,"Error while creating a board",e)
+                Toast.makeText(activity,"Error while Updating",Toast.LENGTH_LONG).show()
+
+            }
+    }
+     fun loadUserData(activity: Activity){
         mFireStore.collection(com.example.manajerpro.activities.utils.Constants.USERS)
             .document(getCurrentUserId())
             .get()
@@ -32,6 +55,9 @@ class FirestoreClass {
                     }
                     is MainActivity->{
                         activity.updateNavigationUserDetails(loggedInUser)
+                    }
+                    is MyProfileActivity->{
+                        activity.setUserDataInUI(loggedInUser)
                     }
                 }
 
@@ -52,11 +78,22 @@ class FirestoreClass {
     }
 
     fun getCurrentUserId():String{
-        var currentUser=  com.google.firebase.auth.FirebaseAuth.getInstance().currentUser
+        val currentUser = FirebaseAuth.getInstance().currentUser
+
+        // A variable to assign the currentUserId if it is not null or else it will be blank.
+        var currentUserID = ""
+        if (currentUser != null) {
+            currentUserID = currentUser.uid
+        }
+
+        return currentUserID
+
+        /*var currentUser=  com.google.firebase.auth.FirebaseAuth.getInstance().currentUser
         var currentUserID=""
         if(currentUser!=null){
             currentUserID=currentUser.uid
         }
         return currentUserID
+         */
     }
 }
