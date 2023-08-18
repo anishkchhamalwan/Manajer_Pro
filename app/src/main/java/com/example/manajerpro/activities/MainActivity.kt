@@ -5,16 +5,22 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
+import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.manajerpro.R
+import com.example.manajerpro.activities.adapters.BoardItemsAdapter
 import com.example.manajerpro.activities.firebase.FirestoreClass
+import com.example.manajerpro.activities.models.Board
 import com.example.manajerpro.activities.models.User
+import com.example.manajerpro.activities.utils.Constants
 import com.example.manajerpro.databinding.ActivityMainBinding
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
@@ -28,7 +34,9 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
     companion object{
         const val MY_PROFILE_REQUEST_CODE :Int =11
+        const val CREATE_BOARD_REQUEST_CODE:Int=12
     }
+    private lateinit var mUserName:String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,11 +56,38 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         binding.navView.setNavigationItemSelectedListener(this)
 
 
-        FirestoreClass().loadUserData(this)
+        FirestoreClass().loadUserData(this,true)
 
         val fab = findViewById<FloatingActionButton>(R.id.fab_create_board)
         fab.setOnClickListener {
-            startActivity(Intent(this,CreateBoardActivity::class.java))
+            val intent=Intent(this,CreateBoardActivity::class.java)
+            intent.putExtra(Constants.NAME,mUserName)
+            startActivityForResult(intent, CREATE_BOARD_REQUEST_CODE)
+        }
+    }
+
+    fun populateBoardsListToUI(boardsList:ArrayList<Board>){
+        hideProgressDialog()
+        val rv = findViewById<RecyclerView>(R.id.rv_boards_list)
+        if(boardsList.size >0){
+            rv.visibility= View.VISIBLE
+            findViewById<TextView>(R.id.tv_no_boards_available).visibility= View.GONE
+
+            rv.layoutManager = LinearLayoutManager(this)
+            rv.setHasFixedSize(true)
+
+            val adapter= BoardItemsAdapter(this,boardsList)
+            rv.adapter=adapter
+
+            adapter.setOnClickListener(object: BoardItemsAdapter.OnClickListener{
+                override fun onClick(position:Int,model: Board){
+                    startActivity(Intent(this@MainActivity,TaskListActivity::class.java))
+                }
+            })
+
+        }else{
+            rv.visibility=View.GONE
+            findViewById<TextView>(R.id.tv_no_boards_available).visibility= View.VISIBLE
         }
     }
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -94,6 +129,9 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         super.onActivityResult(requestCode, resultCode, data)
         if(resultCode == Activity.RESULT_OK && requestCode== MY_PROFILE_REQUEST_CODE){
             FirestoreClass().loadUserData(this)
+        }else if(resultCode==Activity.RESULT_OK
+            &&requestCode== CREATE_BOARD_REQUEST_CODE){
+            FirestoreClass().getBoardsList(this)
         }
         else{
             Log.e("Cancelled","Cancelled")
@@ -118,7 +156,9 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         binding.drawerLayout.closeDrawer(GravityCompat.START)
         return true
     }
-    fun updateNavigationUserDetails(user: User){
+    fun updateNavigationUserDetails(user: User,readBoardsList:Boolean){
+
+        mUserName= user.name
         val iv = findViewById<ImageView>(R.id.nav_user_image)
        // val view = layoutInflater.inflate(R.layout.nav_header_main,null)
         //val viewFromOther = view.findViewById<ImageView>(R.id.nav_user_image)
@@ -131,10 +171,15 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             .placeholder(R.drawable.ic_user_place_holder)
             .into(iv)
 
-       val tv_usname= findViewById<TextView>(R.id.tv_username)
+        val tv_usname= findViewById<TextView>(R.id.tv_username)
         tv_usname.text=user.name
-        //nav_header_main.tvUsername.text = user.name
 
+        if(readBoardsList){
+            showProgressDialog(resources.getString(R.string.please_wait))
+            FirestoreClass().getBoardsList(this)
+        }
+
+        //nav_header_main.tvUsername.text = user.name
         //val tvUser= view.findViewById<TextView>(R.id.tv_username)
         //tvUser.text= user.name
     }
