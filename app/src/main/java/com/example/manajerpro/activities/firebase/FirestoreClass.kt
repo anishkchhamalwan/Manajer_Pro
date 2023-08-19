@@ -8,6 +8,7 @@ import com.example.manajerpro.activities.MainActivity
 import com.example.manajerpro.activities.MyProfileActivity
 import com.example.manajerpro.activities.SignInActivity
 import com.example.manajerpro.activities.SignUpActivity
+import com.example.manajerpro.activities.TaskListActivity
 import com.example.manajerpro.activities.models.Board
 import com.example.manajerpro.activities.models.User
 import com.example.manajerpro.activities.utils.Constants
@@ -24,6 +25,22 @@ class FirestoreClass {
             .document(getCurrentUserId()).set(userInfo, com.google.firebase.firestore.SetOptions.merge())
             .addOnSuccessListener{
                 activity.userRegisteredSuccess()
+            }
+    }
+
+    fun getBoardDetails(activity: TaskListActivity,documentId: String){
+        mFireStore.collection(Constants.BOARDS)
+            .document(documentId)
+            .get()
+            .addOnSuccessListener {
+                    document->
+                Log.i(activity.javaClass.simpleName,document.toString())
+                activity.boardDetails(document.toObject(Board::class.java)!!)
+            }
+            .addOnFailureListener{
+                    e->
+                activity.hideProgressDialog()
+                Log.e(activity.javaClass.simpleName,"Error while creating Boards")
             }
     }
 

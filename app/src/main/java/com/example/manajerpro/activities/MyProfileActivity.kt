@@ -106,6 +106,7 @@ class MyProfileActivity : BaseActivity() {
     }
     private fun setUpActionBar() {
         val tb = findViewById<Toolbar>(R.id.toolbar_my_profile_activity)
+        setSupportActionBar(tb)
         val actionBar = supportActionBar
         if(actionBar!=null){
             actionBar.setDisplayHomeAsUpEnabled(true)
