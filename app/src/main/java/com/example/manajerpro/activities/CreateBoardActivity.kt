@@ -36,6 +36,7 @@ class CreateBoardActivity : BaseActivity() {
             mUserName= intent.getStringExtra(Constants.NAME).toString()
         }
 
+
         val iv = findViewById<ImageView>(R.id.iv_board_image)
         iv.setOnClickListener {
             if (ContextCompat.checkSelfPermission(

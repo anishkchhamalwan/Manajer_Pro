@@ -23,7 +23,9 @@
             android:text="@string/action_add_list"
             android:textColor="@color/colorAccent"
             android:textSize="@dimen/task_item_add_item_text_size"
-            android:visibility="gone"
+
+
+            android:visibility="visible"
             tools:visibility="visible" />
 
         <androidx.cardview.widget.CardView
@@ -32,6 +34,8 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/task_item_cv_margin"
             android:elevation="@dimen/task_item_cv_elevation"
+
+
             android:visibility="gone"
             app:cardCornerRadius="@dimen/task_item_cv_corner_radius"
             tools:visibility="visible">
@@ -78,7 +82,9 @@
             android:background="@color/task_list_action_color"
             android:gravity="center_vertical"
             android:orientation="vertical"
-            android:visibility="gone"
+
+
+            android:visibility="visible"
             tools:visibility="visible">
 
             <LinearLayout
@@ -89,7 +95,8 @@
                 android:elevation="@dimen/task_item_title_view_elevation"
                 android:gravity="center"
                 android:orientation="horizontal"
-                android:visibility="visible"
+
+                android:visibility="gone"
                 tools:visibility="visible">
 
                 <TextView
@@ -132,6 +139,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/task_item_cv_margin"
                 android:elevation="@dimen/task_item_cv_elevation"
+
                 android:visibility="gone"
                 app:cardCornerRadius="@dimen/task_item_cv_corner_radius"
                 tools:visibility="visible">
@@ -183,6 +191,8 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/task_item_cv_margin"
                 android:elevation="@dimen/task_item_cv_elevation"
+
+
                 android:visibility="gone"
                 app:cardCornerRadius="@dimen/task_item_cv_corner_radius"
                 tools:visibility="visible">
@@ -234,7 +244,10 @@
                 android:text="@string/action_add_card"
                 android:textColor="@color/colorAccent"
                 android:textSize="@dimen/task_item_add_item_text_size"
-                tools:visibility="visible" />
+                tools:visibility="visible"
+
+                android:visibility="gone"
+                />
         </LinearLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView>
