@@ -15,12 +15,14 @@ import com.example.manajerpro.activities.firebase.FirestoreClass
 import com.example.manajerpro.activities.models.Board
 import com.example.manajerpro.activities.models.Card
 import com.example.manajerpro.activities.models.Task
+import com.example.manajerpro.activities.models.User
 import com.example.manajerpro.activities.utils.Constants
 
 class TaskListActivity : BaseActivity() {
 
     private lateinit var mBoardDetails: Board
     private lateinit var mBoardDocumentId: String
+    private lateinit var mAssignedMemberDetailList:ArrayList<User>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_task_list)
@@ -57,6 +59,9 @@ class TaskListActivity : BaseActivity() {
 
         val adapter = TaskListItemsAdapter(this,mBoardDetails.taskList)
         rvTaskList.adapter = adapter
+
+        showProgressDialog(resources.getString(R.string.please_wait))
+        FirestoreClass().getAssignedMembersListDetails(this,mBoardDetails.assignedTo)
 
     }
     private fun setUpActionBar() {
@@ -132,6 +137,7 @@ class TaskListActivity : BaseActivity() {
         intent.putExtra(Constants.BOARD_DETAILS,mBoardDetails)
         intent.putExtra(Constants.TASK_LIST_ITEM_POSITION,taskListPosition)
         intent.putExtra(Constants.CARD_LIST_ITEM_POSITION,cardPosition)
+        intent.putExtra(Constants.BOARD_MEMBERS_LIST,mAssignedMemberDetailList)
         startActivityForResult(intent, CARD_DETAILS_REQUEST_CODE)
     }
 
@@ -152,6 +158,11 @@ class TaskListActivity : BaseActivity() {
         }
 
         return super.onOptionsItemSelected(item)
+    }
+
+    fun boardMembersDetailsList(list: ArrayList<User>){
+        mAssignedMemberDetailList= list
+        hideProgressDialog()
     }
 
     companion object{

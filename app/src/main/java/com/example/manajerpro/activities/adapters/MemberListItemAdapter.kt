@@ -4,16 +4,20 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.manajerpro.R
 import com.example.manajerpro.activities.models.User
+import com.example.manajerpro.activities.utils.Constants
 
 open class MemberListItemAdapter(
     private val context:Context,
     private val list: ArrayList<User>
 ): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+    private var onClickListener:OnClickListener?=null
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return MyViewHolder(
             LayoutInflater.from(context).inflate(
@@ -37,6 +41,7 @@ open class MemberListItemAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val model = list[position]
 
+
         if (holder is MyViewHolder) {
 
             Glide
@@ -48,6 +53,25 @@ open class MemberListItemAdapter(
 
             holder.itemView.findViewById<TextView>(R.id.tv_member_name).text = model.name
             holder.itemView.findViewById<TextView>(R.id.tv_member_email).text = model.email
+
+            if(model.selected){
+                holder.itemView.findViewById<ImageView>(R.id.iv_selected_member).visibility= View.VISIBLE
+            }
+            else{
+                holder.itemView.findViewById<ImageView>(R.id.iv_selected_member).visibility= View.GONE
+
+            }
+            holder.itemView.setOnClickListener {
+                if(onClickListener!=null){
+                    if(model.selected){
+                        onClickListener!!.onClick(position,model,Constants.UN_SELECT)
+                    }else{
+                        onClickListener!!.onClick(position,model,Constants.SELECT)
+
+                    }
+                }
+            }
+
         }
     }
 
@@ -58,8 +82,16 @@ open class MemberListItemAdapter(
         return list.size
     }
 
+    fun setOnClickListener(onClickListener: OnClickListener){
+        this.onClickListener= onClickListener
+    }
+
     /**
      * A ViewHolder describes an item view and metadata about its place within the RecyclerView.
      */
     class MyViewHolder(view: View) : RecyclerView.ViewHolder(view)
+
+    interface OnClickListener{
+        fun onClick(position: Int,user: User,action:String)
+    }
 }

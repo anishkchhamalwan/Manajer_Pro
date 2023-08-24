@@ -8,7 +8,8 @@ data class User(
     val email:String="",
     val image:String="",
     val mobile:Long=0,
-    val fcmToken: String=""
+    val fcmToken: String="",
+    var selected: Boolean = false
 ): Parcelable {
     constructor(parcel: android.os.Parcel) : this(
         parcel.readString()!!,
@@ -16,7 +17,8 @@ data class User(
         parcel.readString()!!,
         parcel.readString()!!,
         parcel.readLong(),
-        parcel.readString()!!
+        parcel.readString()!!,
+
     ) {
     }
 
