@@ -293,7 +293,7 @@ class CardDetailsActivity : BaseActivity() {
             rv.layoutManager=GridLayoutManager(
                 this,6
             )
-            val adapter = CardMembersListItemsAdapter(this,selectedMembersList)
+            val adapter = CardMembersListItemsAdapter(this,selectedMembersList,true)
             rv.adapter=adapter
 
             adapter.setOnClickListener(
